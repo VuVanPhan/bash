@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 # filter ticket with query
+source ./.env
 
-echo -n "Enter query filter the ticket for delete : "
-read query
-
-echo -n "Enter subdomain site you used : "
-read subdomain
-
-echo -n "Enter username admin : "
-read username
-
-echo -n "Enter password admin : "
-read -s password
+#echo -n "Enter query filter the ticket for delete : "
+#read query
+#
+#echo -n "Enter subdomain site you used : "
+#read subdomain
+#
+#echo -n "Enter username admin : "
+#read username
+#
+#echo -n "Enter password admin : "
+#read -s password
 
 # query example
 #query="created=2018-12-11 type:ticket status:new IP: 45.117.239.146"
