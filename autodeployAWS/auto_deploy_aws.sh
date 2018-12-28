@@ -5,13 +5,24 @@ sudo su
 # update softwave
 apt-get update
 
+# install apache2 system
+#apt-get -y install apache2
+
 # install nginx system
 apt-get -y install nginx
 
 # install php
 apt-get -y update
 add-apt-repository ppa:ondrej/php
+# install php with nginx
 apt-get install -y php7.1 php7.1-fpm php7.1-cli php7.1-common php7.1-gd php7.1-mysql php7.1-mcrypt php7.1-curl php7.1-intl php7.1-xsl php7.1-mbstring php7.1-zip php7.1-bcmath php7.1-iconv php7.1-soap
+
+# install php with apache2
+#apt-get install php7.1 libapache2-mod-php7.1 libapache2-mod-php7.1 php7.1-common php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd php7.1-xml php7.1-intl php7.1-mysql php7.1-cli php7.1-mcrypt php7.1-ldap php7.1-zip php7.1-curl
+
+# down version php
+#sudo a2dismod php7.1
+#sudo a2enmod php7.2
 
 # Install MariaDB 10.2
 apt-get install software-properties-common
@@ -63,8 +74,11 @@ chmod u+x bin/magento
 # Install PHP Composer
 apt-get install -y composer
 
-#Install Magento components using the PHP composer
+# Install Magento components using the PHP composer
 composer install -v
+
+# Install Magento components using the PHP composer. Ignore platform request when not compatible with PHP
+#composer install --ignore-platform-reqs
 
 # install Magento from the command line
 php bin/magento setup:install \
