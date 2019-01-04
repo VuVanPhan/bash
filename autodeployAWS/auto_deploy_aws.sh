@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+# source config
+source ./.env
+
+sudo mkdir -p www/html
+cd www/html/
+sudo chmod -R 777 .
+
 # sudo with root permissions
 sudo su
 
@@ -18,11 +25,23 @@ add-apt-repository ppa:ondrej/php
 apt-get install -y php7.1 php7.1-fpm php7.1-cli php7.1-common php7.1-gd php7.1-mysql php7.1-mcrypt php7.1-curl php7.1-intl php7.1-xsl php7.1-mbstring php7.1-zip php7.1-bcmath php7.1-iconv php7.1-soap
 
 # install php with apache2
-#apt-get install php7.1 libapache2-mod-php7.1 libapache2-mod-php7.1 php7.1-common php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd php7.1-xml php7.1-intl php7.1-mysql php7.1-cli php7.1-mcrypt php7.1-ldap php7.1-zip php7.1-curl
+#apt-get install php7.1 libapache2-mod-php7.1 libapache2-mod-php7.1 php7.1-common php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd php7.1-xml php7.1-intl php7.1-mysql php7.1-cli php7.1-mcrypt php7.1-ldap php7.1-zip php7.1-curl php7.1-bcmath
 
 # down version php
 #sudo a2dismod php7.1
 #sudo a2enmod php7.2
+
+# To remove any trace of mariadb installed through apt-get:
+
+##service mysql stop
+#apt-get --purge remove "mysql*"
+#apt-get purge mariadb-*
+#rm -rf /etc/mysql/
+##and it is all gone. Including databases and any configuration file.
+##to check if anything named mysql is gone do a
+#sudo updatedb
+##and a
+#locate mysql
 
 # Install MariaDB 10.2
 apt-get install software-properties-common
@@ -82,7 +101,7 @@ composer install -v
 
 # install Magento from the command line
 php bin/magento setup:install \
- --base-url=http://3.80.131.92/\
+ --base-url=http://localhost/magentogitsource/\
  --db-host=localhost \
  --db-name=magento \
  --db-user=magento \
@@ -133,7 +152,7 @@ systemctl restart nginx.service
 
 #php bin/magento setup:upgrade
 #php bin/magento setup:di:compile
-#php bin/magento set:static-content:deploy -f
+#php bin/magento setup:static-content:deploy -f
 #php bin/magento indexer:reindex
 #php bin/magento webpos:deploy
 #php bin/magento cache:flush
