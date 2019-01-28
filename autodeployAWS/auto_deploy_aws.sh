@@ -2,8 +2,9 @@
 # source config
 source ./.env
 
-sudo mkdir -p www/html
-cd www/html/
+# Create folder
+sudo mkdir -p /var/www/html
+cd /var/www/html/
 sudo chmod -R 777 .
 
 # sudo with root permissions
@@ -19,13 +20,12 @@ apt-get update
 apt-get -y install nginx
 
 # install php
-apt-get -y update
 add-apt-repository ppa:ondrej/php
 # install php with nginx
-apt-get install -y php7.1 php7.1-fpm php7.1-cli php7.1-common php7.1-gd php7.1-mysql php7.1-mcrypt php7.1-curl php7.1-intl php7.1-xsl php7.1-mbstring php7.1-zip php7.1-bcmath php7.1-iconv php7.1-soap
+apt-get install -y php7.1 php7.1-fpm php7.1-cli php7.1-common php7.1-gd php7.1-mysql php7.1-mcrypt php7.1-curl php7.1-ctype php7.1-intl php7.1-xsl php7.1-mbstring php7.1-zip php7.1-bcmath php7.1-iconv php7.1-soap
 
 # install php with apache2
-#apt-get install php7.1 libapache2-mod-php7.1 libapache2-mod-php7.1 php7.1-common php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd php7.1-xml php7.1-intl php7.1-mysql php7.1-cli php7.1-mcrypt php7.1-ldap php7.1-zip php7.1-curl php7.1-bcmath
+#apt-get install php7.1 libapache2-mod-php7.1 php7.1-common php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd php7.1-xml php7.1-intl php7.1-mysql php7.1-cli php7.1-mcrypt php7.1-ldap php7.1-zip php7.1-curl php7.1-bcmath
 
 # down version php
 #sudo a2dismod php7.1
@@ -62,14 +62,10 @@ systemctl start mysql
 # Create Magento Database
 mysql -u root -p
 create database magento;
-create user magento identified by 'magento123@#';
-grant all privileges on magento.* to magento@localhost identified by 'magento123@#';
+create user magento23x identified by 'magento123@#';
+grant all privileges on magento23x.* to magento23x@localhost identified by 'magento123@#';
 flush privileges;
 exit;
-
-# Create folder
-cd /var/www/html/
-chmod -R 777 ./
 
 # download source and un tar package
 wget https://github.com/magento/magento2/archive/2.2.6.tar.gz
@@ -101,10 +97,10 @@ composer install -v
 
 # install Magento from the command line
 php bin/magento setup:install \
- --base-url=http://localhost/magentogitsource/\
+ --base-url=http://localhost/magento/v1/\
  --db-host=localhost \
- --db-name=magento \
- --db-user=magento \
+ --db-name=magento23x \
+ --db-user=magento23x \
  --db-password=magento123@# \
  --backend-frontname=admin \
  --admin-firstname=Magento \
@@ -125,18 +121,42 @@ systemctl disable nginx.service
 systemctl stop nginx.service
 
 echo " upstream fastcgi_backend {
-     server unix:/run/php/php7.1-fpm.sock;
+     server unix:/run/php/php7.2-fpm.sock;
  }
 
  server {
 
      listen 80;
-     set \$MAGE_ROOT /var/www/html;
+     server_name demo-standard.magestore.com/v4;
+     set \$MAGE_ROOT /var/www/html/v4;
      include /var/www/html/nginx.conf.sample;
- }" > /etc/nginx/sites-available/magento
+ }" > /etc/nginx/sites-available/magento23x
+
+## config vitual host nginx
+#echo " upstream fastcgi_backend {
+#     server unix:/run/php/php7.1-fpm.sock;
+# }
+#
+# upstream fastcgi23x_backend {
+#     server unix:/run/php/php7.2-fpm.sock;
+# }
+#
+# server {
+#     listen 80;
+#     server_name demo-standard.magestore.com/v4;
+#     set \$MAGE_ROOT /var/www/html/v3;
+#     include /var/www/html/v3/nginx.conf.sample;
+# }
+#
+# server {
+#     listen 80;
+#     server_name demo-standard.magestore.com/v4;
+#     set \$MAGE_ROOT /var/www/html/v4;
+#     include /var/www/html/v4/nginx.conf.sample;
+# }" > /etc/nginx/sites-available/magento23x
 
 # Creating a symlink to it in the /etc/nginx/sites-enabled directory
-ln -s /etc/nginx/sites-available/magento /etc/nginx/sites-enabled
+ln -s /etc/nginx/sites-available/magento23x /etc/nginx/sites-enabled
 
 # remove nginx default
 rm -f /etc/nginx/sites-enabled/default
